@@ -20,9 +20,15 @@ class DepartamentoEdificioTableSeeder extends Seeder
         $faker = Faker::create();
 
         for ($i = 0; $i < 10; $i++) { 
-            array_push($datos, ['idDep' => $faker->numberBetween(1,8), 'idEdi' => $faker->numberBetween(1,10), 'despacho' => $faker->numberBetween(1,10)]);
+            array_push($datos, [
+                'idDep' => $faker->numberBetween(1,8), 
+                'idEdi' => $faker->numberBetween(1,10), 
+                'despacho' => $faker->numberBetween(1,5)
+            ]);
         }
 
         DB::table('departamento_edificio')->insert($datos);
+                
     }
+
 }

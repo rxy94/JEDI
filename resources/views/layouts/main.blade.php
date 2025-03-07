@@ -14,10 +14,15 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="bg-gray-200 font-sans text-gray-900 antialiased">
         
+        @if(Auth::user()->perfil)
+            <x-menu/>
+        @endif
+
         @section('contenido')
             
+
         @show
 
     </body>

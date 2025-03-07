@@ -18,4 +18,5 @@ class EsAdmin
     {
         return ($request->user()->perfil)? $next($request) : to_route('construccion');
     }
+    
 }
