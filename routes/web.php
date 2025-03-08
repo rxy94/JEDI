@@ -7,7 +7,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 # Rutas para Login
-
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/', [AuthenticatedSessionController::class, 'store']);
 
@@ -44,7 +43,8 @@ Route::group([ 'prefix' => 'edificio',
                 'controller' => EdificioController::class,
                 'as' => 'edificio.' ], 
                 function() {
-                    //TODO
+                    Route::put('/actualizar/{edificio}', 'actualizar')->name('actualizar');
+                    Route::delete('/borrar/{edificio}', 'borrar')->name('borrar');
                 }
 );
 

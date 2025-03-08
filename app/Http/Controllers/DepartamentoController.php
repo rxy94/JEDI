@@ -32,16 +32,16 @@ class DepartamentoController extends Controller
 
         $value = $request->input('departamentos');
 
-        # Mostramos el formulario de crear departamento si el value == 'crear'
+        # Mostramos el formulario de crear departamento en el Home
         if ($value == 'crear') {
             return view('dashboard');
         }
 
+        # Recupero la info del departamento enviado desde la vista
         $departamento = Departamento::find($value);
-        //$edificios = $departamento->edificios;
+
+        # Recupero el número de despachos de ese departamento
         $edificios = $departamento->edificios()->withPivot('despacho')->get();
-        //dd($despachos);
-        //dd($edificios);
 
         return view('departamento.edificios', ['departamento' => $departamento, 'edificios' => $edificios]);
         
@@ -64,7 +64,10 @@ class DepartamentoController extends Controller
             'nombre' => $request->input('nombre'),
         ]);
 
-        return to_route('departamento.edificios', ['idDep' => $departamento->idDep]);
+        # Recupero los despachos del departamento nuevo
+        $edificios = $departamento->edificios()->withPivot('despacho')->get();
+
+        return view('departamento.edificios', ['departamento' => $departamento, 'edificios' => $edificios]);
 
     }
     
