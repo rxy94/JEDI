@@ -20,6 +20,7 @@ class Edificio extends Model
         'nombre',
         'calle',
         'numero',
+        'cp',
     ];
 
     /**
@@ -29,7 +30,8 @@ class Edificio extends Model
      */
     public function departamentos(): BelongsToMany
     {
-        return $this->belongsToMany(Departamento::class, 'departamento_edificio', 'idEdi', 'idDep');
+        return $this->belongsToMany(Departamento::class, 'departamento_edificio', 'idEdi', 'idDep')
+                    ->withPivot('despacho');
     }
 
 }

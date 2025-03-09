@@ -32,8 +32,11 @@ Route::group([ 'prefix' => 'departamento',
                'controller' => DepartamentoController::class,
                'as' => 'departamento.' ], 
                 function() {
-                    Route::match(['get', 'post'], '/mostrar', 'mostrar')->name('mostrar');
+                    Route::match(['get', 'post'], '/mostrarEdificios', 'mostrar')->name('mostrar');
                     Route::match(['get', 'post'], '/validar', 'validar')->name('validar');
+                    Route::get('/asociarEdificio/{departamento}', 'mostrarAsociarEdificio')->name('mostrarAsociarEdificio');
+                    Route::post('/asociarEdificio/{departamento}', 'asociarEdificio')->name('asociarEdificio');
+                    
                 }
 );
 
@@ -43,8 +46,14 @@ Route::group([ 'prefix' => 'edificio',
                 'controller' => EdificioController::class,
                 'as' => 'edificio.' ], 
                 function() {
+                    Route::get('/listar', 'listar')->name('listar');
                     Route::put('/actualizar/{edificio}', 'actualizar')->name('actualizar');
                     Route::delete('/borrar/{edificio}', 'borrar')->name('borrar');
+                    Route::delete('/borrarTodo/{edificio}', 'borrarTodo')->name('borrarTodo');
+                    Route::get('/mostrarEdificios/{departamento}', 'mostrarDatos')->name('mostrarDatos');
+                    Route::match(['get', 'post'], 'crearEdificio', 'crear')->name('crear');
+                    Route::match(['get', 'post'], 'editar/{edificio}', 'editar')->name('editar');
+
                 }
 );
 

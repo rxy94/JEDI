@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departamento;
+use App\Models\Edificio;
 use Illuminate\Http\Request;
 
 class DepartamentoController extends Controller
@@ -22,7 +23,7 @@ class DepartamentoController extends Controller
     }
 
     /**
-     * Muestra una vista según un value
+     * Muestra una vista según un value obtenido de la vista
      *
      * @param Request $request
      * @return void
@@ -41,9 +42,17 @@ class DepartamentoController extends Controller
         $departamento = Departamento::find($value);
 
         # Recupero el número de despachos de ese departamento
-        $edificios = $departamento->edificios()->withPivot('despacho')->get();
+        $edificios = $departamento->edificios;
 
-        return view('departamento.edificios', ['departamento' => $departamento, 'edificios' => $edificios]);
+        # Calculamos el total de despachos para cada edificio
+        $edificios->each(function ($edificio) {
+            $edificio->totalDespachos = $edificio->departamentos->sum('pivot.despacho');
+        });
+
+        return view('departamento.edificios', [
+            'departamento' => $departamento, 
+            'edificios' => $edificios
+        ]);
         
     }
 
@@ -65,9 +74,60 @@ class DepartamentoController extends Controller
         ]);
 
         # Recupero los despachos del departamento nuevo
-        $edificios = $departamento->edificios()->withPivot('despacho')->get();
+        $edificios = $departamento->edificios;
 
-        return view('departamento.edificios', ['departamento' => $departamento, 'edificios' => $edificios]);
+        return view('departamento.edificios', [
+            'departamento' => $departamento, 
+            'edificios' => $edificios
+        ]);
+
+    }
+
+    /**
+     * Muestra la vista asociar edificio para un departamento
+     *
+     * @param Request $request
+     * @param Departamento $departamento
+     * @return void
+     */
+    public function mostrarAsociarEdificio(Departamento $departamento)
+    {
+
+        # Recuperamos los edificios que no están asociados al departamento
+        $edificiosNoAsociados = Edificio::whereDoesntHave('departamentos', function ($query) use ($departamento) {
+            $query->where('departamento_edificio.idDep', $departamento->idDep);
+        })->get();
+
+        # Calculamos el número total de despachos para cada edificio
+        $edificiosNoAsociados->each(function ($edificio) {
+            $edificio->totalDespachos = $edificio->departamentos->sum('pivot.despacho');
+        });
+
+        return view('departamento.asociar', [
+            'departamento' => $departamento,
+            'edificios' => $edificiosNoAsociados,
+        ]);
+
+    }
+
+    /**
+     * Asocia un número de despachos de un edificio a un departamento
+     *
+     * @param Request $request
+     * @param Departamento $departamento
+     * @return void
+     */
+    public function asociarEdificio(Request $request, Departamento $departamento)
+    {
+        //dd($departamento);
+
+        $idEdi = $request->input('idEdi');
+        $numDespachos = $request->input('numDespachos');
+
+        # Asociamos el edificio al departamento con el número de despachos especificado
+        $departamento->edificios()->attach($idEdi, ['despacho' => $numDespachos]);
+
+        return to_route('edificio.mostrarDatos', ['departamento' => $departamento->idDep]);
 
     }
     

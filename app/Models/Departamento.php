@@ -37,7 +37,8 @@ class Departamento extends Model
      */
     public function edificios(): BelongsToMany
     {
-        return $this->belongsToMany(Edificio::class, 'departamento_edificio', 'idDep', 'idEdi');
+        return $this->belongsToMany(Edificio::class, 'departamento_edificio', 'idDep', 'idEdi')
+                    ->withPivot('despacho');
     }
 
 }
