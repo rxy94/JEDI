@@ -4,7 +4,7 @@
     
         <div>
             <label id="listbox-label" class="block text-2xl font-semibold text-gray-900 text-center mb-5">
-                Listado de Departamentos
+                @lang('jedi.tit_dept')
             </label>
             {{-- Select de departamentos --}}
             <div class="flex gap-3 mt-2">
@@ -28,7 +28,9 @@
                 
                 {{-- Botón Aceptar --}}
                 <div class="m-auto w-2/5 mt-1">
-                    <button class="border border-gray-700 rounded-lg bg-gray-800 text-gray-200 w-full px-10 py-2">Aceptar</button>
+                    <button class="border border-gray-700 rounded-lg bg-gray-800 text-gray-200 w-full px-10 py-2">
+                        @lang('jedi.btn_aceptar')
+                    </button>
                 </div> 
             </div>
             
